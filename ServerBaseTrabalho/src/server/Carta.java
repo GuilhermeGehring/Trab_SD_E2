@@ -12,8 +12,18 @@ package server;
 public class Carta {
     private String nome;
     private String elemento;
-    private int atk1;
-    private int atk2;
+    private int skill1;
+    private int skill2;
+
+    public Carta(String nome, String elemento, int skill1, int skill2) {
+        this.nome = nome;
+        this.elemento = elemento;
+        this.skill1 = skill1;
+        this.skill2 = skill2;
+    }
+
+    public Carta() {
+    }
 
     public String getNome() {
         return nome;
@@ -31,25 +41,30 @@ public class Carta {
         this.elemento = elemento;
     }
 
-    public int getAtk1() {
-        return atk1;
+    public int getSkill1() {
+        return skill1;
     }
 
-    public void setAtk1(int atk1) {
-        this.atk1 = atk1;
+    public void setSkill1(int skill1) {
+        this.skill1 = skill1;
     }
 
-    public int getAtk2() {
-        return atk2;
+    public int getSkill2() {
+        return skill2;
     }
 
-    public void setAtk2(int atk2) {
-        this.atk2 = atk2;
+    public void setSkill2(int skill2) {
+        this.skill2 = skill2;
     }
-
-    public Carta() {
-    }
-
-  
     
+    @Override
+    public String toString() {
+        String s = "Carta :" + nome + "\n";
+        s+= "elemento: "+ elemento+"\n";
+        s+= "Ataque 1: " + skill1+ "\n";
+        s+= "Ataque 2: " + skill2 +"\n";
+        
+        return s;
+    }
+
 }

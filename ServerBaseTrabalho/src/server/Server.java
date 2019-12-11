@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import util.Estados;
 import util.Mensagem;
 
@@ -22,14 +24,24 @@ public class Server {
     int porta;
     ArrayList<Thread> threads;
     ArrayList<Jogador> jogadores;
+    Map<Integer, Integer> ranking;
 
     public Server() {
         threads = new ArrayList<>();
         jogadores = new ArrayList<>();
+        ranking = new HashMap<>();
     }
 
     protected void avisaServer(String msg) {
         System.out.println("Cliente avisou: " + msg);
+    }
+    
+    public void setRanking(Integer chave, Integer valor) {
+        ranking.put(chave, valor);
+    }
+
+    public Integer getRanking(Integer chave) {
+        return ranking.get(chave);
     }
 
     private void init() throws IOException {
@@ -48,6 +60,7 @@ public class Server {
                 //Criar outra thread para tratar cliente novo
                 
                 Jogador tarefa = new Jogador(socket, this, id++);
+                setRanking(id-1, 0);
                 jogadores.add(tarefa);
                 Thread thread = new Thread(tarefa);
                 threads.add(thread);
@@ -144,4 +157,5 @@ public class Server {
         
         return null;
     }
+
 }

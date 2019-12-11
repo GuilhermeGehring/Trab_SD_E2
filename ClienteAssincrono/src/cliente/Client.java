@@ -6,12 +6,9 @@
 package cliente;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.IIOException;
 import util.Mensagem;
 
@@ -65,7 +62,7 @@ public class Client implements Observer {
     public static void main(String[] args) {
         try {
             Scanner leitura = new Scanner(System.in);
-            Client cliente = new Client("Lucas");
+            Client cliente = new Client("Guilherme");
             //conexao com server
             Socket socket = cliente.conectaComServidor("localhost", 5555);
             //streams de saida e entrada

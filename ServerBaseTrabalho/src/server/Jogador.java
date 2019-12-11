@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Map;
+import java.util.stream.Stream;
 import util.Estados;
 import util.Mensagem;
 import util.Status;
@@ -183,8 +185,8 @@ class Jogador implements Runnable {
                                     server.convidaTodos(convite, this);
                                 } catch (Exception e) {
                                     //tratamento de erros
-                                        resposta.setStatus(Status.ERROR);
-                                        resposta.setParam("Erro", e.getMessage());
+                                    resposta.setStatus(Status.ERROR);
+                                    resposta.setParam("Erro", e.getMessage());
                                 }
                                 break;
                             case "ACEITAR":
@@ -204,6 +206,10 @@ class Jogador implements Runnable {
                                         jogador2.output.writeUTF("INVITERESPONSE;OK;msg:Partida aceita por jogador " + id);
                                         jogador2.output.flush();
                                         
+                                        Integer valor = server.getRanking(jogador2.id);
+                                        server.setRanking(jogador2.id, valor+50);
+                                        Jogo novoJogo = new Jogo(this, jogador2);
+                                        
                                     }
 
                                 } catch (Exception e) {
@@ -211,16 +217,15 @@ class Jogador implements Runnable {
                                     resposta.setParam("erro", e.getMessage());
                                 }
                                 break;
-                            case "CHECK":
-                                //validando protocolo (parse)
-                                try {
-                                    //tratamento da mensagem
-
-                                } catch (Exception e) {
-
+                            case "RANKING": {
+                                for (Integer chave : server.ranking.keySet()) {
+                                    resposta.setParam("p" + chave, "" + server.getRanking(chave));
                                 }
+                                
+                                resposta.setStatus(Status.OK);
+
                                 break;
-                            //exemplo com troca de estados
+                            }
                             case "LOGOUT":
                                 estado = Estados.CONECTADO;
                                 resposta.setStatus(Status.OK);
@@ -234,6 +239,17 @@ class Jogador implements Runnable {
                         break;
                     case JOGANDO:
                         System.out.println("Jogador " + id + " está jogando");
+                        switch (operacao) {
+                            case "VOLTAR":
+                                estado = Estados.AUTENTICADO;
+                                resposta.setStatus(Status.OK);
+                                break;
+                            default:
+                                //mensagem inválida
+                                resposta.setStatus(Status.ERROR);
+                                resposta.setParam("error", "Mensagem Inválida ou não autorizada!");
+                                break;
+                        }
                         break;
                 }
                 //enviar a resposta ao cliente

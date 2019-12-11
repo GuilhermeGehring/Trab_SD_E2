@@ -43,7 +43,6 @@ public class MessageHelper<T extends Mensagem> implements Runnable, Subject {
         try {
             while (true) {
                 msg = input.readUTF();
-                System.out.println("Mensagem vinda do server: " + msg);
                 Mensagem m = Mensagem.clientParseString(msg);
                 for (Observer<Mensagem> o : observers) {
                     o.update(m);
